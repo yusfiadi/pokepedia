@@ -60,6 +60,21 @@ type DetailsProps = {
   useEffect(() => {
     window.localStorage.setItem("my_pokemon_list", JSON.stringify(myPokemon));
   }, [myPokemon]);
+  const catchProbability = (percentage: number) => {
+    return Math.random() < percentage;
+  };
+
+  const catchPokemon = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      if (catchProbability(0.5)) {
+        handleOpenModal();
+      } else {
+        handleOpenAlert();
+      }
+    }, 1000);
+  };
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
