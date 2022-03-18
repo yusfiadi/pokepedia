@@ -1,11 +1,19 @@
+import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
 import { GetServerSideProps } from "next";
-
+import Container from "@mui/material/Container";
+import styled from "@emotion/styled";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import AppBar from "../../components/AppBar";
 import client from "../../apollo-client";
 import { GET_POKEMON_DETAILS } from "../../graphql/queries/getPokemonDetails";
+import SuccessCatchModal from "../../components/SuccessCatchModal";
+import FailedCatchAlert from "../../components/FailedCatchAlert";
+
 
 const DetailsPage: NextPage = () => {
   return <Button variant="contained">Details Page</Button>;
