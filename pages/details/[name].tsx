@@ -9,6 +9,27 @@ import { GET_POKEMON_DETAILS } from "../../graphql/queries/getPokemonDetails";
 
 const DetailsPage: NextPage = () => {
   return <Button variant="contained">Details Page</Button>;
+type DetailsProps = {
+  pokemon: {
+    id: number;
+    name: string;
+    sprites: {
+      front_default: string;
+      back_default: string;
+      back_female: string;
+    };
+    moves: {
+      move: {
+        name: string;
+      };
+    };
+    types: {
+      type: {
+        name: string;
+      };
+    };
+  };
+};
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
