@@ -38,6 +38,15 @@ type DetailsProps = {
     };
   };
 };
+  useEffect(() => {
+    setMyPokemon(
+      JSON.parse(window.localStorage.getItem("my_pokemon_list") ?? "[]")
+    );
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("my_pokemon_list", JSON.stringify(myPokemon));
+  }, [myPokemon]);
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
