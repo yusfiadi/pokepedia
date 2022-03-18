@@ -38,6 +38,9 @@ type DetailsProps = {
     };
   };
 };
+  const [myPokemon, setMyPokemon] = useState<any>([]);
+  const [nickname, setNickname] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setMyPokemon(
       JSON.parse(window.localStorage.getItem("my_pokemon_list") ?? "[]")
