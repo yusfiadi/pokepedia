@@ -78,6 +78,24 @@ type DetailsProps = {
   const handleChangeNickname = (event: any) => {
     setNickname(event.target.value);
   };
+  const handleSubmit = (data: any) => {
+    if (
+      typeof myPokemon.find((pokemon: any) => pokemon.nickname === nickname) ===
+      "undefined"
+    ) {
+      setMyPokemon([
+        ...myPokemon,
+        {
+          id: data.id,
+          nickname: nickname,
+          name: data.name,
+          sprites: data.sprites,
+          moves: data.moves,
+          types: data.types,
+        },
+      ]);
+    }
+  };
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
