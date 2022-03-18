@@ -75,6 +75,9 @@ type DetailsProps = {
       }
     }, 1000);
   };
+  const handleChangeNickname = (event: any) => {
+    setNickname(event.target.value);
+  };
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
