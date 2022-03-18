@@ -41,6 +41,16 @@ type DetailsProps = {
   const [myPokemon, setMyPokemon] = useState<any>([]);
   const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setNickname("");
+  };
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const handleOpenAlert = () => setOpenAlert(true);
+  const handleCloseAlert = () => setOpenAlert(false);
   useEffect(() => {
     setMyPokemon(
       JSON.parse(window.localStorage.getItem("my_pokemon_list") ?? "[]")
