@@ -14,9 +14,10 @@ import { GET_POKEMON_DETAILS } from "../../graphql/queries/getPokemonDetails";
 import SuccessCatchModal from "../../components/SuccessCatchModal";
 import FailedCatchAlert from "../../components/FailedCatchAlert";
 
+const ContainerStyled = styled(Container)`
+  padding: 20px 0;
+`;
 
-const DetailsPage: NextPage = () => {
-  return <Button variant="contained">Details Page</Button>;
 type DetailsProps = {
   pokemon: {
     id: number;
@@ -38,9 +39,12 @@ type DetailsProps = {
     };
   };
 };
+
+const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
   const [myPokemon, setMyPokemon] = useState<any>([]);
   const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {
@@ -51,6 +55,7 @@ type DetailsProps = {
   const [openAlert, setOpenAlert] = useState(false);
   const handleOpenAlert = () => setOpenAlert(true);
   const handleCloseAlert = () => setOpenAlert(false);
+
   useEffect(() => {
     setMyPokemon(
       JSON.parse(window.localStorage.getItem("my_pokemon_list") ?? "[]")
@@ -60,6 +65,7 @@ type DetailsProps = {
   useEffect(() => {
     window.localStorage.setItem("my_pokemon_list", JSON.stringify(myPokemon));
   }, [myPokemon]);
+
   const catchProbability = (percentage: number) => {
     return Math.random() < percentage;
   };
@@ -75,9 +81,11 @@ type DetailsProps = {
       }
     }, 1000);
   };
+
   const handleChangeNickname = (event: any) => {
     setNickname(event.target.value);
   };
+
   const handleSubmit = (data: any) => {
     if (
       typeof myPokemon.find((pokemon: any) => pokemon.nickname === nickname) ===
@@ -96,6 +104,39 @@ type DetailsProps = {
       ]);
     }
   };
+
+  return (
+    <>
+      <AppBar />
+      <ContainerStyled maxWidth={"md"}>
+        <Box>
+          <Typography variant="h5">{pokemon.name}</Typography>
+          {isLoading ? (
+            <LoadingButton
+              size="small"
+              loading={isLoading}
+              variant="outlined"
+              disabled
+            >
+              loading
+            </LoadingButton>
+          ) : (
+            <Button variant="outlined" size="small" onClick={catchPokemon}>
+              Catch it!
+            </Button>
+          )}
+          <SuccessCatchModal
+            open={openModal}
+            nickname={nickname}
+            handleChange={handleChangeNickname}
+            handleClose={handleCloseModal}
+            handleSubmit={() => handleSubmit(pokemon)}
+          />
+          <FailedCatchAlert open={openAlert} handleClose={handleCloseAlert} />
+        </Box>
+      </ContainerStyled>
+    </>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -105,9 +146,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       name: context.query.name,
     },
   });
-  
+
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      pokemon: data.pokemon,
+    }, // will be passed to the page component as props
   };
 };
 
