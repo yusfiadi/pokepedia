@@ -7,12 +7,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Divider from "@mui/material/Divider";
 
 import AppBar from "../../components/AppBar";
 import client from "../../apollo-client";
 import { GET_POKEMON_DETAILS } from "../../graphql/queries/getPokemonDetails";
 import SuccessCatchModal from "../../components/SuccessCatchModal";
 import FailedCatchAlert from "../../components/FailedCatchAlert";
+import DuplicateNicknameAlert from "../../components/DuplicateNicknameAlert";
+import SuccessCatchAlert from "../../components/SuccessCatchAlert";
 
 const ContainerStyled = styled(Container)`
   padding: 20px 0;
@@ -31,12 +38,12 @@ type DetailsProps = {
       move: {
         name: string;
       };
-    };
+    }[];
     types: {
       type: {
         name: string;
       };
-    };
+    }[];
   };
 };
 
@@ -52,9 +59,17 @@ const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
     setNickname("");
   };
 
-  const [openAlert, setOpenAlert] = useState(false);
-  const handleOpenAlert = () => setOpenAlert(true);
-  const handleCloseAlert = () => setOpenAlert(false);
+  const [openFailedAlert, setOpenFailedAlert] = useState(false);
+  const handleOpenFailedAlert = () => setOpenFailedAlert(true);
+  const handleCloseFailedAlert = () => setOpenFailedAlert(false);
+
+  const [openInfoAlert, setOpenInfoAlert] = useState(false);
+  const handleOpenInfoAlert = () => setOpenInfoAlert(true);
+  const handleCloseInfoAlert = () => setOpenInfoAlert(false);
+
+  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+  const handleOpenSuccessAlert = () => setOpenSuccessAlert(true);
+  const handleCloseSuccessAlert = () => setOpenSuccessAlert(false);
 
   useEffect(() => {
     setMyPokemon(
@@ -77,7 +92,7 @@ const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
       if (catchProbability(0.5)) {
         handleOpenModal();
       } else {
-        handleOpenAlert();
+        handleOpenFailedAlert();
       }
     }, 1000);
   };
@@ -102,29 +117,66 @@ const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
           types: data.types,
         },
       ]);
+      handleCloseModal();
+      handleOpenSuccessAlert();
+    } else {
+      handleOpenInfoAlert();
     }
   };
 
   return (
     <>
       <AppBar />
-      <ContainerStyled maxWidth={"md"}>
+      <ContainerStyled maxWidth={"xs"}>
         <Box>
-          <Typography variant="h5">{pokemon.name}</Typography>
-          {isLoading ? (
-            <LoadingButton
-              size="small"
-              loading={isLoading}
-              variant="outlined"
-              disabled
-            >
-              loading
-            </LoadingButton>
-          ) : (
-            <Button variant="outlined" size="small" onClick={catchPokemon}>
-              Catch it!
-            </Button>
-          )}
+          <Card>
+            <CardMedia
+              component="img"
+              alt={pokemon.name}
+              image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+            />
+            <CardContent>
+              <h5>{pokemon.name}</h5>
+              {pokemon.moves.length > 0 && (
+                <>
+                  <h6>Moves</h6>
+                  <ul>
+                    {pokemon.moves.map((move: any, id: number) => {
+                      return <li key={id}>{move.move.name}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+
+              {pokemon.types.length > 0 && (
+                <>
+                  <h6>Types</h6>
+                  <ul>
+                    {pokemon.types.map((type: any, id: number) => {
+                      return <li key={id}>{type.type.name}</li>;
+                    })}
+                  </ul>
+                </>
+              )}
+            </CardContent>
+            <Divider />
+            <CardActions>
+              {isLoading ? (
+                <LoadingButton
+                  size="small"
+                  loading={isLoading}
+                  variant="outlined"
+                  disabled
+                >
+                  loading
+                </LoadingButton>
+              ) : (
+                <Button variant="outlined" size="small" onClick={catchPokemon}>
+                  Catch it!
+                </Button>
+              )}
+            </CardActions>
+          </Card>
           <SuccessCatchModal
             open={openModal}
             nickname={nickname}
@@ -132,7 +184,18 @@ const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
             handleClose={handleCloseModal}
             handleSubmit={() => handleSubmit(pokemon)}
           />
-          <FailedCatchAlert open={openAlert} handleClose={handleCloseAlert} />
+          <FailedCatchAlert
+            open={openFailedAlert}
+            handleClose={handleCloseFailedAlert}
+          />
+          <DuplicateNicknameAlert
+            open={openInfoAlert}
+            handleClose={handleCloseInfoAlert}
+          />
+          <SuccessCatchAlert
+            open={openSuccessAlert}
+            handleClose={handleCloseSuccessAlert}
+          />
         </Box>
       </ContainerStyled>
     </>
