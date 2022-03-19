@@ -9,9 +9,10 @@ query pokemons($limit: Int, $offset: Int) {
     status
     message
     results {
+      id
       name
       url
-      dreamworld
+      artwork
     }
   }
 }
