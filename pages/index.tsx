@@ -1,8 +1,11 @@
+import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
+import styled from "@emotion/styled";
 import { GetServerSideProps } from "next";
+import { useLazyQuery } from "@apollo/client";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import styled from "@emotion/styled";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_POKEMON_LIST } from "../graphql/queries/getPokemonList";
 
 import AppBar from "../components/AppBar";
@@ -14,28 +17,78 @@ const ContainerStyled = styled(Container)`
 `;
 
 type HomeProps = {
-  pokemonList: {
+  initialPokemonList: {
     name: string;
     url: string;
     dreamworld: string;
   }[];
+  totalCount: number;
 };
 
-const Home: NextPage<HomeProps> = ({ pokemonList }) => {
+const Home: NextPage<HomeProps> = ({ initialPokemonList, totalCount }) => {
+  const [myPokemon, setMyPokemon] = useState<any>([]);
+  const [pokemonList, setPokemonList] = useState(initialPokemonList);
+  const [offsetQuery, setOffsetQuery] = useState(12); // because initial pokemon list have 10 item
+
+  const [getNextPokemonList, { data }] = useLazyQuery(GET_POKEMON_LIST);
+
+  const fetchNextPokemonList = () => {
+    getNextPokemonList({ variables: { limit: 12, offset: offsetQuery } });
+    setOffsetQuery((oldValue) => oldValue + 12);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setPokemonList([...pokemonList, ...data.pokemons.results]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setMyPokemon(
+      JSON.parse(window.localStorage.getItem("my_pokemon_list") ?? "[]")
+    );
+  }, []);
+
+  const countTotalPokemonOwned = (name: string) => {
+    let count = myPokemon.filter(
+      (myPokemon: any) => myPokemon.name === name
+    ).length;
+
+    return count;
+  };
+
   return (
     <>
       <AppBar />
       <ContainerStyled maxWidth={"md"}>
-        <Grid container spacing={3}>
-          {pokemonList.length > 0 &&
-            pokemonList.map((pokemon: any, id: number) => {
-              return (
-                <Grid item xs={6} sm={4} key={id}>
-                  <PokemonCard pokemon={pokemon} />
-                </Grid>
-              );
-            })}
-        </Grid>
+        <div style={{ paddingRight: "10px", paddingLeft: "10px" }}>
+          <InfiniteScroll
+            dataLength={pokemonList.length}
+            next={fetchNextPokemonList}
+            hasMore={pokemonList.length < totalCount - 12}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen all pokemons!</b>
+              </p>
+            }
+          >
+            <Grid container spacing={3}>
+              {pokemonList.length > 0 &&
+                pokemonList.map((pokemon: any, id: number) => {
+                  return (
+                    <Grid item xs={6} sm={4} key={id}>
+                      <PokemonCard
+                        cardType="pokemon-list"
+                        pokemon={pokemon}
+                        count={countTotalPokemonOwned(pokemon.name)}
+                      />
+                    </Grid>
+                  );
+                })}
+            </Grid>
+          </InfiniteScroll>
+        </div>
       </ContainerStyled>
     </>
   );
@@ -45,14 +98,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data } = await client.query({
     query: GET_POKEMON_LIST,
     variables: {
-      limit: 10,
+      limit: 12,
       offset: 0,
     },
   });
 
   return {
     props: {
-      pokemonList: data.pokemons.results,
+      initialPokemonList: data.pokemons.results,
+      totalCount: data.pokemons.count,
     }, // will be passed to the page component as props
   };
 };
