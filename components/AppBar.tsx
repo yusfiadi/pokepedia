@@ -39,18 +39,16 @@ const ResponsiveAppBar = () => {
     <AppBar position="static" color="transparent">
       <Container maxWidth="md">
         <Toolbar disableGutters>
-          <Link href="/" passHref>
-            <a>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-              >
-                Pokepedia
-              </Typography>
-            </a>
-          </Link>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+          >
+            <Link href="/" passHref>
+              <a>Pokepedia</a>
+            </Link>
+          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -81,24 +79,26 @@ const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link href="/my-pokemon" key={page}>
+                  <a>
+                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  </a>
+                </Link>
               ))}
             </Menu>
           </Box>
-          <Link href="/" passHref>
-            <a>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-              >
-                Pokepedia
-              </Typography>
-            </a>
-          </Link>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+          >
+            <Link href="/" passHref>
+              <a>Pokepedia</a>
+            </Link>
+          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Link href="/my-pokemon" key={page}>
