@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 
 import AppBar from "../components/AppBar";
 import PokemonCard from "../components/PokemonCard";
+import SuccessReleaseAlert from "../components/SuccessReleaseAlert";
 
 const ContainerStyled = styled(Container)`
   padding: 20px 0;
@@ -14,6 +15,15 @@ const ContainerStyled = styled(Container)`
 
 const MyPokemonListPage: NextPage = () => {
   const [myPokemon, setMyPokemon] = useState<any>([]);
+
+  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+  const handleOpenSuccessAlert = () => setOpenSuccessAlert(true);
+  const handleCloseSuccessAlert = (event: any, reason: any) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccessAlert(false);
+  };
 
   useEffect(() => {
     setMyPokemon(
@@ -29,27 +39,35 @@ const MyPokemonListPage: NextPage = () => {
     setMyPokemon(
       myPokemon.filter((pokemon: any) => pokemon.nickname !== nickname)
     );
+    handleOpenSuccessAlert();
   };
 
   return (
     <>
       <AppBar />
       <ContainerStyled maxWidth={"md"}>
-        <Grid container spacing={3}>
-          {myPokemon.length > 0 &&
-            myPokemon.map((pokemon: any, id: number) => {
+        <h4>My Pokemon List</h4>
+        {myPokemon.length > 0 ? (
+          <Grid container spacing={3}>
+            {myPokemon.map((pokemon: any, id: number) => {
               return (
                 <Grid item xs={6} sm={4} key={id}>
-                  {/* <PokemonCard pokemon={pokemon} /> */}
-                  <h3>{pokemon.name}</h3>
-                  <p>{pokemon.nickname}</p>
-                  <button onClick={() => handleRelease(pokemon.nickname)}>
-                    release
-                  </button>
+                  <PokemonCard
+                    pokemon={pokemon}
+                    cardType="my-pokemon"
+                    handleRelease={() => handleRelease(pokemon.nickname)}
+                  />
                 </Grid>
               );
             })}
-        </Grid>
+          </Grid>
+        ) : (
+          <p>You don't have any pokemon</p>
+        )}
+        <SuccessReleaseAlert
+          open={openSuccessAlert}
+          handleClose={handleCloseSuccessAlert}
+        />
       </ContainerStyled>
     </>
   );
