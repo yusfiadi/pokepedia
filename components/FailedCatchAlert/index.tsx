@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
@@ -11,6 +10,7 @@ type Props = {
 const FailedCatchAlert = (props: Props) => {
   return (
     <Snackbar
+      autoHideDuration={2000}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
       open={props.open}
       onClose={props.handleClose}
