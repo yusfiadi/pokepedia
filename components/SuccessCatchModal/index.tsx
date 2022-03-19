@@ -15,11 +15,6 @@ type Props = {
 };
 
 const SuccessCatchModal = (props: Props) => {
-  const handleOnClick = () => {
-    props.handleSubmit();
-    props.handleClose();
-  };
-
   return (
     <Modal
       open={props.open}
@@ -44,7 +39,7 @@ const SuccessCatchModal = (props: Props) => {
         <Button
           variant="outlined"
           size="small"
-          onClick={handleOnClick}
+          onClick={props.handleSubmit}
           disabled={props.nickname.length < 3}
         >
           Name it!
