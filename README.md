@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). This project is aim to display all pokemons list with infinite scroll, and then you can catch any pokemon you want with 50% success probability. At my pokemon list page, you can see your pokemon list you owned, and you can release them one by one.
 
+Build with:
+- Next.js
+- MUI
+- Apollo GraphQL
+- TypeScript
+- Emotion
 ## Getting Started
 
 First, run the development server:
