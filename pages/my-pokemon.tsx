@@ -10,7 +10,7 @@ import PokemonCard from "../components/PokemonCard";
 import SuccessReleaseAlert from "../components/SuccessReleaseAlert";
 
 const ContainerStyled = styled(Container)`
-  padding: 20px 0;
+  padding: 20px 10px;
 `;
 
 const MyPokemonListPage: NextPage = () => {
@@ -62,7 +62,7 @@ const MyPokemonListPage: NextPage = () => {
             })}
           </Grid>
         ) : (
-          <p>You don't have any pokemon</p>
+          <p>I don&apos;t have any pokemon</p>
         )}
         <SuccessReleaseAlert
           open={openSuccessAlert}
