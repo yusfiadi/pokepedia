@@ -4,7 +4,11 @@ import { GetServerSideProps } from "next";
 import Container from "@mui/material/Container";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Card from "@mui/material/Card";
@@ -22,7 +26,35 @@ import DuplicateNicknameAlert from "../../components/DuplicateNicknameAlert";
 import SuccessCatchAlert from "../../components/SuccessCatchAlert";
 
 const ContainerStyled = styled(Container)`
-  padding: 20px 0;
+  padding: 20px 10px;
+`;
+
+const ListStyled = styled.ul`
+  margin: 0;
+`;
+
+const CardActionsStyled = styled(CardActions)`
+  padding: 16px;
+`;
+
+const ButtonActions = styled(Button)`
+  font-size: 12px;
+  width: 100%;
+
+  @media (min-width: 600px) {
+    font-size: 14px;
+    width: auto;
+  }
+`;
+
+const ButtonLoading = styled(LoadingButton)`
+  font-size: 12px;
+  width: 100%;
+
+  @media (min-width: 600px) {
+    font-size: 14px;
+    width: auto;
+  }
 `;
 
 type DetailsProps = {
@@ -131,51 +163,72 @@ const DetailsPage: NextPage<DetailsProps> = ({ pokemon }) => {
         <Box>
           <Card>
             <CardMedia
+              style={{ padding: "20px" }}
               component="img"
               alt={pokemon.name}
               image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
             />
             <CardContent>
-              <h5>{pokemon.name}</h5>
+              <h3>{pokemon.name}</h3>
               {pokemon.moves.length > 0 && (
-                <>
-                  <h6>Moves</h6>
-                  <ul>
-                    {pokemon.moves.map((move: any, id: number) => {
-                      return <li key={id}>{move.move.name}</li>;
-                    })}
-                  </ul>
-                </>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Moves</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ListStyled>
+                      {pokemon.moves.map((move: any, id: number) => {
+                        return <li key={id}>{move.move.name}</li>;
+                      })}
+                    </ListStyled>
+                  </AccordionDetails>
+                </Accordion>
               )}
 
               {pokemon.types.length > 0 && (
-                <>
-                  <h6>Types</h6>
-                  <ul>
-                    {pokemon.types.map((type: any, id: number) => {
-                      return <li key={id}>{type.type.name}</li>;
-                    })}
-                  </ul>
-                </>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Types</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ListStyled>
+                      {pokemon.types.map((type: any, id: number) => {
+                        return <li key={id}>{type.type.name}</li>;
+                      })}
+                    </ListStyled>
+                  </AccordionDetails>
+                </Accordion>
               )}
             </CardContent>
             <Divider />
-            <CardActions>
+            <CardActionsStyled>
               {isLoading ? (
-                <LoadingButton
+                <ButtonLoading
                   size="small"
                   loading={isLoading}
                   variant="outlined"
                   disabled
                 >
                   loading
-                </LoadingButton>
+                </ButtonLoading>
               ) : (
-                <Button variant="outlined" size="small" onClick={catchPokemon}>
+                <ButtonActions
+                  variant="outlined"
+                  size="small"
+                  onClick={catchPokemon}
+                >
                   Catch it!
-                </Button>
+                </ButtonActions>
               )}
-            </CardActions>
+            </CardActionsStyled>
           </Card>
           <SuccessCatchModal
             open={openModal}
