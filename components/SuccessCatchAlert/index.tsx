@@ -11,7 +11,7 @@ const SuccessCatchAlert = (props: Props) => {
   return (
     <Snackbar
       autoHideDuration={2000}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       open={props.open}
       onClose={props.handleClose}
     >
