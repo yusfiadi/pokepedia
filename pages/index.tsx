@@ -13,7 +13,7 @@ import PokemonCard from "../components/PokemonCard";
 import client from "../apollo-client";
 
 const ContainerStyled = styled(Container)`
-  padding: 20px 0;
+  padding: 20px 10px;
 `;
 
 type HomeProps = {
@@ -61,34 +61,33 @@ const Home: NextPage<HomeProps> = ({ initialPokemonList, totalCount }) => {
     <>
       <AppBar />
       <ContainerStyled maxWidth={"md"}>
-        <div style={{ paddingRight: "10px", paddingLeft: "10px" }}>
-          <InfiniteScroll
-            dataLength={pokemonList.length}
-            next={fetchNextPokemonList}
-            hasMore={pokemonList.length < totalCount - 12}
-            loader={<h4>Loading...</h4>}
-            endMessage={
-              <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen all pokemons!</b>
-              </p>
-            }
-          >
-            <Grid container spacing={3}>
-              {pokemonList.length > 0 &&
-                pokemonList.map((pokemon: any, id: number) => {
-                  return (
-                    <Grid item xs={6} sm={4} key={id}>
-                      <PokemonCard
-                        cardType="pokemon-list"
-                        pokemon={pokemon}
-                        count={countTotalPokemonOwned(pokemon.name)}
-                      />
-                    </Grid>
-                  );
-                })}
-            </Grid>
-          </InfiniteScroll>
-        </div>
+        <h4>All Pokemon List</h4>
+        <InfiniteScroll
+          dataLength={pokemonList.length}
+          next={fetchNextPokemonList}
+          hasMore={pokemonList.length < totalCount - 12}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen all pokemons!</b>
+            </p>
+          }
+        >
+          <Grid container spacing={3}>
+            {pokemonList.length > 0 &&
+              pokemonList.map((pokemon: any, id: number) => {
+                return (
+                  <Grid item xs={6} sm={4} key={id}>
+                    <PokemonCard
+                      cardType="pokemon-list"
+                      pokemon={pokemon}
+                      count={countTotalPokemonOwned(pokemon.name)}
+                    />
+                  </Grid>
+                );
+              })}
+          </Grid>
+        </InfiniteScroll>
       </ContainerStyled>
     </>
   );
