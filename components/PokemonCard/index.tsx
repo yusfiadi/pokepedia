@@ -24,6 +24,7 @@ const PokemonCard = (props: PokemonCardProps) => {
   return (
     <Card>
       <CardMedia
+        style={{ padding: "20px" }}
         component="img"
         alt={props.pokemon.name}
         image={
@@ -44,7 +45,7 @@ const PokemonCard = (props: PokemonCardProps) => {
       <Divider />
       <Styled.CardActionsStyled>
         {props.cardType === "pokemon-list" && (
-          <Link href={`/details/${props.pokemon.name}`}>
+          <Link href={`/details/${props.pokemon.name}`} passHref>
             <Styled.ButtonActions variant="outlined" size="small">
               See Details
             </Styled.ButtonActions>
