@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,7 +15,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
 
 const pages = ["My Pokemon"];
-const settings = ["My Pokemon"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -43,80 +43,19 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+            }}
           >
             <Link href="/" passHref>
               <a>Pokepedia</a>
             </Link>
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <Link href="/my-pokemon" key={page}>
-                  <a>
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  </a>
-                </Link>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            <Link href="/" passHref>
-              <a>Pokepedia</a>
-            </Link>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Link href="/my-pokemon" key={page}>
-                <a>
-                  <Button
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
-                  >
-                    {page}
-                  </Button>
-                </a>
-              </Link>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display: { xs: "flex", sm: "none" } }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
+                <AccountCircle />
               </IconButton>
             </Tooltip>
             <Menu
@@ -135,16 +74,30 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Link href="/my-pokemon">
-                    <a>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </a>
-                  </Link>
-                </MenuItem>
+              {pages.map((page) => (
+                <Link href="/my-pokemon" key={page} passHref>
+                  <a>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  </a>
+                </Link>
               ))}
             </Menu>
+          </Box>
+          <Box sx={{ flexGrow: 0, display: { xs: "none", sm: "flex" } }}>
+            {pages.map((page) => (
+              <Link href="/my-pokemon" key={page} passHref>
+                <a>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "black", display: "block" }}
+                  >
+                    {page}
+                  </Button>
+                </a>
+              </Link>
+            ))}
           </Box>
         </Toolbar>
       </Container>
