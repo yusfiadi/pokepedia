@@ -1,8 +1,6 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 
 import * as Styled from "./SuccessCatchModalStyled";
 
@@ -23,27 +21,30 @@ const SuccessCatchModal = (props: Props) => {
       aria-describedby="modal-modal-description"
     >
       <Styled.BoxStyled>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Styled.ModalTitle id="modal-modal-title" variant="h6">
           Congrats! You successfully catch this pokemon!
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        </Styled.ModalTitle>
+        <Styled.ModalDescription id="modal-modal-description" sx={{ mt: 2 }}>
           Please give a nickname
-        </Typography>
-        <TextField
-          id="outlined-basic"
-          label="Nickname"
-          variant="outlined"
-          onChange={props.handleChange}
-          value={props.nickname}
-        />
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={props.handleSubmit}
-          disabled={props.nickname.length < 3}
-        >
-          Name it!
-        </Button>
+        </Styled.ModalDescription>
+        <Styled.InputWrapper>
+          <TextField
+            id="outlined-basic"
+            label="Nickname"
+            variant="outlined"
+            size="small"
+            onChange={props.handleChange}
+            value={props.nickname}
+          />
+          <Styled.ButtonCatch
+            variant="outlined"
+            size="medium"
+            onClick={props.handleSubmit}
+            disabled={props.nickname.length < 3}
+          >
+            Name it!
+          </Styled.ButtonCatch>
+        </Styled.InputWrapper>
       </Styled.BoxStyled>
     </Modal>
   );
